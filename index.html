@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercícios PAS 1 · Malu</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1f2328;--muted:#5d646d;--line:#e3e0d8;--accent:#1d5fa8}
+@media (prefers-color-scheme:dark){:root{--bg:#16181b;--card:#1f2226;--ink:#e8e6e1;--muted:#a3a8ae;--line:#33373c;--accent:#6aa5e8}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:760px;margin:0 auto;padding:22px 14px 50px}h1{font-size:1.5rem;margin:0 0 4px}.sub{color:var(--muted);margin:0 0 18px}
+h2{font-size:1.05rem;margin:22px 0 8px;color:var(--accent)}
+a.ex{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 10px;color:inherit;text-decoration:none}
+a.ex:hover{border-color:var(--accent)}a.ex b{display:block;font-size:1.02rem}a.ex span{color:var(--muted);font-size:.9rem}
+</style></head><body><main>
+<h1>Exercícios PAS 1 · Malu</h1>
+<p class="sub">Itens no estilo Cebraspe/UnB, com correção na hora e pontuação do PAS. Ao terminar, toque em <b>Salvar</b> no fim da página.</p>
+<div id="lista">Carregando…</div>
+</main>
+<script>
+fetch("exercicios.json",{cache:"no-store"}).then(r=>r.json()).then(L=>{
+ const by={};L.forEach(e=>(by[e.materia]=by[e.materia]||[]).push(e));
+ const esc=s=>String(s).replace(/[<>&"]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]));
+ document.getElementById("lista").innerHTML=Object.keys(by).map(m=>`<h2>${esc(m)}</h2>`+by[m].map(e=>`<a class="ex" href="${encodeURI(e.arquivo)}"><b>${esc(e.titulo)}</b><span>${e.itens} itens · ${esc(e.descricao||"")}</span></a>`).join("")).join("");
+}).catch(()=>{document.getElementById("lista").textContent="Não foi possível carregar a lista de exercícios."});
+</script></body></html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Razão, proporção, escala e frações · PAS 1</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1f2328;--muted:#5d646d;--line:#e3e0d8;--accent:#1d5fa8;--soft:#eaf1fa;--ok:#1f7a45;--okbg:#e7f5ec;--no:#b3261e;--nobg:#fcebea;--bl:#8a6d1d;--blbg:#fbf3dc}
+@media (prefers-color-scheme:dark){:root{--bg:#16181b;--card:#1f2226;--ink:#e8e6e1;--muted:#a3a8ae;--line:#33373c;--accent:#6aa5e8;--soft:#1c2a3a;--ok:#5cc58a;--okbg:#17301f;--no:#f08a82;--nobg:#3a1c1a;--bl:#e0c070;--blbg:#3a321a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:780px;margin:0 auto;padding:18px 14px 60px}
+h1{font-size:1.4rem;margin:4px 0}.sub{color:var(--muted);margin:0 0 14px;font-size:.95rem}
+.tabs{display:flex;gap:8px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5;border-bottom:1px solid var(--line);margin-bottom:14px}
+.tabs button{flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:.98rem;cursor:pointer}
+.tabs button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 14px}
+details.sec>summary{cursor:pointer;font-weight:800;font-size:1.08rem;list-style:none}
+details.sec>summary::before{content:"▸ ";color:var(--accent)}details.sec[open]>summary::before{content:"▾ "}
+h3{font-size:1rem;margin:14px 0 4px;color:var(--accent)}
+.box{background:var(--soft);border-radius:10px;padding:10px 12px;margin:8px 0}
+.ex{border-left:3px solid var(--accent);padding:4px 0 4px 12px;margin:8px 0}
+.warn{background:var(--blbg);border-radius:10px;padding:10px 12px;margin:8px 0}
+table{border-collapse:collapse;width:100%;font-size:.93rem;margin:6px 0}td,th{border:1px solid var(--line);padding:6px 8px;text-align:left}th{background:var(--soft)}
+.f{font-family:"Cambria Math","STIX Two Math",Georgia,serif;font-size:1.05em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.9em;margin:0 2px}.frac span:first-child{border-bottom:1px solid currentColor;padding:0 2px}
+.rules{font-size:.88rem;color:var(--muted);margin:0 0 12px}
+.stat{display:flex;justify-content:space-between;font-size:.9rem;color:var(--muted);margin-bottom:12px}.stat b{color:var(--ink)}
+.block h2{font-size:1.05rem;margin:0 0 6px}.ctx{font-size:.95rem;background:var(--soft);border-radius:10px;padding:10px 12px;margin-bottom:6px}
+.item{border-top:1px solid var(--line);padding:12px 0 4px}
+.ih{font-size:.82rem;color:var(--muted);margin-bottom:4px}.ih b{color:var(--ink)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:0 6px;border-radius:6px;border:1px solid var(--line);margin-left:6px}
+.st{margin:0 0 8px}.op{margin:2px 0 8px 0;padding-left:0;list-style:none}.op li{margin:2px 0}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts button{flex:1;min-width:58px;min-height:44px;border-radius:10px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font-weight:700;font-size:1rem;cursor:pointer}
+.opts button.blank{flex:0 0 auto;padding:0 12px;font-weight:600;color:var(--muted)}
+.opts input{flex:1;min-width:110px;min-height:44px;border-radius:10px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font-size:1.1rem;padding:0 12px;letter-spacing:.2em}
+.opts button.sel.ok{background:var(--ok);border-color:var(--ok);color:#fff}.opts button.sel.no{background:var(--no);border-color:var(--no);color:#fff}.opts button.sel.bl{background:var(--bl);border-color:var(--bl);color:#fff}
+.opts button.right{border-color:var(--ok);color:var(--ok)}.opts button:disabled,.opts input:disabled{cursor:default}
+.fb{display:none;margin-top:10px;border-radius:10px;padding:10px 12px;font-size:.95rem}
+.fb.ok{display:block;background:var(--okbg)}.fb.no{display:block;background:var(--nobg)}.fb.bl{display:block;background:var(--blbg)}.fb strong{display:block;margin-bottom:3px}
+.end{text-align:center}.end .n{font-size:2.2rem;font-weight:800;color:var(--accent)}
+.btn{margin-top:10px;padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:700;font-size:1rem;cursor:pointer}
+.hide{display:none}
+</style></head><body><main>
+<h1>Razão, proporção, escala e frações</h1>
+<p class="sub">Matemática · PAS 1 UnB. Teoria resumida e 20 itens inéditos no estilo Cebraspe, com correção e explicação.</p>
+<div class="tabs"><button id="tT" class="on">📘 Teoria</button><button id="tQ">✏️ 20 questões</button></div>
+
+<section id="teoria">
+<details class="sec card" open><summary>1. Razão</summary>
+<p>Razão é a comparação de duas grandezas por <b>divisão</b>: a razão entre a e b (b ≠ 0) é <span class="f">a : b</span> ou <span class="f"><span class="frac"><span>a</span><span>b</span></span></span>. A ordem importa: "razão entre A e B" é A ÷ B.</p>
+<div class="ex"><b>Exemplo.</b> Uma turma tem 12 meninos e 18 meninas. Razão meninos/meninas = 12/18 = <b>2/3</b>. Razão meninos/total = 12/30 = <b>2/5 = 40%</b>.</div>
+<h3>Razões especiais (caem muito)</h3>
+<table><tr><th>Nome</th><th>Razão</th><th>Exemplo</th></tr>
+<tr><td>Velocidade média</td><td>distância ÷ tempo</td><td>150 km em 2 h = 75 km/h</td></tr>
+<tr><td>Densidade</td><td>massa ÷ volume</td><td>1.000 g em 1 L = 1 kg/L</td></tr>
+<tr><td>Densidade demográfica</td><td>habitantes ÷ área</td><td>3 milhões em 5.760 km² ≈ 521 hab/km²</td></tr>
+<tr><td>Escala</td><td>medida no desenho ÷ medida real</td><td>1 cm : 100.000 cm</td></tr>
+<tr><td>Porcentagem</td><td>parte ÷ 100</td><td>35% = 35/100 = 0,35</td></tr></table>
+<div class="warn"><b>Armadilha:</b> antes de dividir, coloque as grandezas na <b>mesma unidade</b> (cm com cm, minutos com minutos). Razão entre 30 min e 2 h é 30/120 = 1/4, não 30/2.</div>
+</details>
+
+<details class="sec card"><summary>2. Proporção e propriedade fundamental</summary>
+<p>Proporção é a <b>igualdade de duas razões</b>: <span class="f"><span class="frac"><span>a</span><span>b</span></span> = <span class="frac"><span>c</span><span>d</span></span></span>.</p>
+<div class="box"><b>Propriedade fundamental:</b> o produto dos meios é igual ao produto dos extremos: <span class="f">a · d = b · c</span> ("multiplicar cruzado").</div>
+<div class="ex"><b>Exemplo.</b> <span class="f"><span class="frac"><span>3</span><span>5</span></span> = <span class="frac"><span>x</span><span>40</span></span></span> → 5x = 120 → <b>x = 24</b>.</div>
+<h3>Propriedade da soma</h3>
+<p>Se <span class="f">a/b = c/d = k</span>, então <span class="f">(a + c)/(b + d) = k</span>. É ela que resolve a divisão proporcional.</p>
+</details>
+
+<details class="sec card"><summary>3. Grandezas direta e inversamente proporcionais</summary>
+<table><tr><th></th><th>Diretamente proporcionais</th><th>Inversamente proporcionais</th></tr>
+<tr><td>Comportamento</td><td>uma dobra → a outra dobra</td><td>uma dobra → a outra cai pela metade</td></tr>
+<tr><td>O que é constante</td><td><b>o quociente</b> y/x = k</td><td><b>o produto</b> x · y = k</td></tr>
+<tr><td>Gráfico</td><td>reta pela origem (função afim y = kx)</td><td>hipérbole (y = k/x)</td></tr>
+<tr><td>Exemplos</td><td>quantidade × preço; tempo × distância (velocidade fixa)</td><td>velocidade × tempo (distância fixa); nº de operários × prazo</td></tr></table>
+<h3>Regra de três simples</h3>
+<div class="ex"><b>Direta.</b> 3 kg custam R$ 24; 5 kg custam? 3/24 = 5/x → <b>x = R$ 40</b>.</div>
+<div class="ex"><b>Inversa.</b> A 60 km/h, a viagem dura 4 h. A 80 km/h? Produto constante: 60 · 4 = 80 · t → <b>t = 3 h</b>.</div>
+<h3>Regra de três composta</h3>
+<p>Monte uma tabela, compare cada grandeza com a <b>incógnita</b> (direta ou inversa) e inverta as razões inversas.</p>
+<div class="ex"><b>Exemplo.</b> 4 pessoas plantam 600 mudas em 3 dias. Quantas mudas 6 pessoas plantam em 5 dias? Mais pessoas → mais mudas (direta); mais dias → mais mudas (direta). x = 600 · (6/4) · (5/3) = <b>1.500 mudas</b>.<br>Atalho: ritmo = 600 ÷ (4·3) = 50 mudas por pessoa por dia → 50 · 6 · 5 = 1.500.</div>
+<div class="warn"><b>Armadilha do PAS:</b> o item diz "são diretamente proporcionais" para grandezas que são <b>inversas</b> (ex.: velocidade e tempo de viagem). Sempre teste: "se uma dobra, o que acontece com a outra?".</div>
+</details>
+
+<details class="sec card"><summary>4. Divisão proporcional</summary>
+<h3>Diretamente proporcional</h3>
+<p>Dividir N em partes proporcionais a a, b, c: cada parte é <span class="f">k·a, k·b, k·c</span>, com <span class="f">k = N ÷ (a + b + c)</span>.</p>
+<div class="ex">Dividir R$ 900 entre 2, 3 e 4: k = 900/9 = 100 → <b>200, 300 e 400</b>.</div>
+<h3>Inversamente proporcional</h3>
+<p>Divida proporcionalmente aos <b>inversos</b> 1/a, 1/b, 1/c.</p>
+<div class="ex">Dividir R$ 900 inversamente a 2, 3 e 6: k(1/2 + 1/3 + 1/6) = 900 → k = 900 → <b>450, 300 e 150</b>. Quem tem o maior número recebe menos.</div>
+<h3>Sociedade (capital × tempo)</h3>
+<p>Lucro dividido proporcionalmente ao produto <b>capital × tempo</b> de cada sócio (erro que apareceu no Enem 2026 da Malu, Q143).</p>
+</details>
+
+<details class="sec card"><summary>5. Escala: linear, de área e de volume</summary>
+<div class="box"><b>Escala = medida no desenho ÷ medida real</b>, nas mesmas unidades. 1 : 50.000 significa 1 cm no mapa = 50.000 cm = 500 m no real.</div>
+<h3>Conversões úteis</h3>
+<table><tr><td>1 km = 1.000 m = 100.000 cm</td><td>1 km² = 10<sup>10</sup> cm²</td></tr><tr><td>1 m = 100 cm</td><td>1 m² = 10.000 cm² · 1 m³ = 1.000 L</td></tr></table>
+<div class="ex">Mapa 1 : 250.000, distância de 8 cm → 8 · 250.000 = 2.000.000 cm = <b>20 km</b>.</div>
+<h3>A regra de ouro: k, k², k³</h3>
+<table><tr><th>Se a razão linear é k</th><th>a razão é</th><th>Exemplo com k = 1/10</th></tr>
+<tr><td>Comprimentos</td><td><b>k</b></td><td>1/10</td></tr><tr><td>Áreas</td><td><b>k²</b></td><td>1/100</td></tr><tr><td>Volumes (e massas, se mesmo material)</td><td><b>k³</b></td><td>1/1.000</td></tr></table>
+<div class="ex">Uma maquete na escala 1 : 200 tem área 1/40.000 da área real. Passar de 1 : 400 para 1 : 200 <b>dobra</b> os comprimentos e <b>quadruplica</b> a área.</div>
+<div class="warn"><b>Armadilha:</b> se a área ficou 100 vezes menor, a escala linear é 1 : 10, e não 1 : 100 (erro da Malu no Enem 2026, Q168).</div>
+</details>
+
+<details class="sec card"><summary>6. Frações</summary>
+<h3>Operações</h3>
+<table><tr><td>Soma/subtração</td><td>iguale os denominadores (MMC): 1/4 + 1/6 = 3/12 + 2/12 = <b>5/12</b></td></tr>
+<tr><td>Multiplicação</td><td>numerador × numerador, denominador × denominador: 2/3 · 3/4 = 6/12 = <b>1/2</b></td></tr>
+<tr><td>Divisão</td><td>multiplique pelo inverso: (3/4) ÷ (1/8) = 3/4 · 8 = <b>6</b></td></tr>
+<tr><td>"Fração de"</td><td>"de" = multiplicação: 3/5 de 200 = <b>120</b></td></tr></table>
+<h3>Fração de fração</h3>
+<div class="ex">3/5 da turma fez o PAS e 1/3 desses passou da média → 1/3 · 3/5 = <b>1/5 = 20% da turma</b> (não 1/3!).</div>
+<h3>Frações ↔ decimais ↔ porcentagens</h3>
+<table><tr><td>1/2 = 0,5 = 50%</td><td>1/4 = 25%</td><td>3/4 = 75%</td><td>1/5 = 20%</td></tr><tr><td>1/8 = 12,5%</td><td>1/3 ≈ 33,3%</td><td>2/3 ≈ 66,7%</td><td>1/20 = 5%</td></tr></table>
+<h3>Aumentos e descontos (fator multiplicativo)</h3>
+<p>Aumentar p% → multiplicar por (1 + p/100). Reduzir p% → multiplicar por (1 − p/100). Reduzir 12% = <b>× 0,88</b> (erro da Malu no Enem 2026, Q158). Dois aumentos de 10% = × 1,1 × 1,1 = × 1,21 → <b>21%</b>, não 20%.</p>
+<h3>Frações na música (o PAS adora)</h3>
+<table><tr><th>Figura</th><th>Duração (semibreve = 1)</th></tr>
+<tr><td>Semibreve</td><td>1</td></tr><tr><td>Mínima</td><td>1/2</td></tr><tr><td>Semínima</td><td>1/4</td></tr><tr><td>Colcheia</td><td>1/8</td></tr><tr><td>Semicolcheia</td><td>1/16</td></tr></table>
+<p>O <b>ponto de aumento</b> soma metade da duração: semínima pontuada = 1/4 + 1/8 = 3/8. A fórmula de compasso também é fração: <b>3/4</b> = três semínimas por compasso.</p>
+</details>
+
+<div class="card"><b>Checklist antes de marcar no PAS</b><br>1. As unidades são iguais? 2. É direta ou inversa? 3. Escala de área/volume usa k² e k³. 4. "Fração de fração" multiplica. 5. Na dúvida no Certo/Errado, deixe em branco.</div>
+<button class="btn" id="goQ">Ir para as 20 questões →</button>
+</section>
+
+<section id="questoes" class="hide">
+<p class="rules"><b>Pontuação do PAS:</b> Certo/Errado: +1 / <b>−1</b>. Múltipla escolha: +2 / <b>−0,67</b>. Numérico: +2 / 0. Em branco: 0.</p>
+<div class="stat"><span><b id="done">0</b> de 20 · ✅ <b id="nok">0</b> · ❌ <b id="nno">0</b> · ⬜ <b id="nbl">0</b></span><span>Pontos: <b id="pts">0</b></span></div>
+<div id="list"></div>
+<div class="card end hide" id="end"><div class="n" id="en"></div><div id="et"></div><button class="btn" id="again">Refazer</button></div>
+</section>
+<script>
+const B=[{"title": "Mapa da Chapada dos Veadeiros", "ctx": "Em um mapa turístico na escala 1 : 250.000, a distância em linha reta entre Alto Paraíso de Goiás e a Vila de São Jorge mede 14 cm. Nesse mesmo mapa, a área do Parque Nacional da Chapada dos Veadeiros ocupa 96 cm².", "items": [{"n": 1, "t": "A", "s": "A distância real, em linha reta, entre Alto Paraíso de Goiás e São Jorge é de 35 km.", "a": "C", "e": "14 × 250.000 = 3.500.000 cm. Como 1 km = 100.000 cm, isso dá <b>35 km</b>."}, {"n": 2, "t": "A", "s": "A área real do parque é inferior a 500 km².", "a": "E", "e": "Na área, a escala vai ao quadrado: 1 cm² do mapa = 250.000² cm² = 6,25 × 10¹⁰ cm² = <b>6,25 km²</b>. Então 96 × 6,25 = <b>600 km²</b>, mais que 500. Quem usou só 250.000 (sem elevar ao quadrado) errou."}, {"n": 3, "t": "B", "s": "Em outro mapa, os mesmos 35 km entre as duas cidades aparecem com 7 cm. Sabendo que a escala desse mapa é 1 : N, calcule N/1.000.", "a": "500", "e": "N = 3.500.000 cm ÷ 7 = 500.000. Logo N/1.000 = <b>500</b>."}]}, {"title": "Maquete do Coliseu", "ctx": "O Coliseu de Roma, obra da lista do PAS 1, tem cerca de 48 m de altura e 188 m no seu eixo maior. Uma escola construiu uma maquete do monumento na escala 1 : 400.", "items": [{"n": 4, "t": "A", "s": "A altura da maquete é de 12 cm.", "a": "C", "e": "48 m = 4.800 cm. Então 4.800 ÷ 400 = <b>12 cm</b>."}, {"n": 5, "t": "A", "s": "Se a escola fizesse uma segunda maquete, na escala 1 : 200, a área ocupada por ela seria o dobro da área ocupada pela primeira.", "a": "E", "e": "De 1 : 400 para 1 : 200, os comprimentos <b>dobram</b> (k = 2), mas a área é multiplicada por k² = <b>4</b>."}, {"n": 6, "t": "A", "s": "O volume da maquete na escala 1 : 400 corresponde a 1/64 do volume de uma maquete do mesmo monumento feita na escala 1 : 100.", "a": "C", "e": "A razão linear entre as maquetes é (1/400) ÷ (1/100) = 1/4. Para volumes, eleva-se ao cubo: (1/4)³ = <b>1/64</b>."}]}, {"title": "Frações na música", "ctx": "Na notação musical, tomando a semibreve como unidade, a mínima vale 1/2, a semínima 1/4, a colcheia 1/8 e a semicolcheia 1/16. O ponto de aumento acrescenta à figura metade do seu valor. A fórmula de compasso 3/4 indica que cada compasso tem a duração de três semínimas, e 2/4, de duas semínimas.", "items": [{"n": 7, "t": "A", "s": "Um compasso 3/4 pode ser completamente preenchido por uma mínima seguida de duas colcheias.", "a": "C", "e": "1/2 + 1/8 + 1/8 = 4/8 + 2/8 = <b>6/8 = 3/4</b>. Preenche exatamente o compasso."}, {"n": 8, "t": "A", "s": "Três colcheias seguidas de uma semínima pontuada completam exatamente um compasso 2/4.", "a": "E", "e": "Três colcheias = 3/8. Semínima pontuada = 1/4 + 1/8 = 3/8. Total = 6/8 = <b>3/4</b>, que é maior que 2/4. Sobra tempo para o compasso."}, {"n": 9, "t": "C", "s": "O número de semicolcheias cuja duração total equivale à de uma mínima pontuada é igual a", "o": ["6.", "8.", "12.", "16."], "a": "C", "e": "Mínima pontuada = 1/2 + 1/4 = 3/4. E 3/4 ÷ 1/16 = 3/4 × 16 = <b>12</b>."}]}, {"title": "O Cerrado em números", "ctx": "O Cerrado ocupa cerca de 2 milhões de km² do território brasileiro, que tem aproximadamente 8,5 milhões de km². Estima-se que cerca de 46% da vegetação nativa do bioma já tenha sido suprimida. Uma organização não governamental vai repartir R$ 180.000 entre três comunidades tradicionais do Cerrado.", "items": [{"n": 10, "t": "A", "s": "A razão entre a área do Cerrado e a área do Brasil é superior a 1/5.", "a": "C", "e": "2/8,5 ≈ 0,235, maior que 1/5 = 0,2. Ou seja, o Cerrado ocupa cerca de <b>24%</b> do país."}, {"n": 11, "t": "A", "s": "A área de vegetação nativa remanescente no Cerrado é superior a 1,2 milhão de km².", "a": "E", "e": "Se 46% foi suprimida, restam 54%: 0,54 × 2 milhões = <b>1,08 milhão de km²</b>, que é menor que 1,2 milhão."}, {"n": 12, "t": "A", "s": "Se o valor for dividido em partes diretamente proporcionais ao número de famílias de cada comunidade — 20, 30 e 40 famílias —, a comunidade maior receberá R$ 80.000.", "a": "C", "e": "k = 180.000 ÷ (20 + 30 + 40) = 2.000 por família. A maior recebe 40 × 2.000 = <b>R$ 80.000</b>."}, {"n": 13, "t": "A", "s": "Se o valor for dividido em partes inversamente proporcionais às distâncias das comunidades até a sede da ONG — 2 km, 3 km e 6 km —, a comunidade mais distante receberá R$ 60.000.", "a": "E", "e": "Divide-se proporcionalmente a 1/2, 1/3 e 1/6, cuja soma é 1. Então k = 180.000, e as partes são 90.000, 60.000 e <b>30.000</b>. A mais distante recebe R$ 30.000."}]}, {"title": "Grandezas proporcionais", "ctx": "Em um mutirão de reflorestamento no Cerrado, 4 voluntários plantaram 600 mudas em 3 dias, todos trabalhando no mesmo ritmo. No vídeo A física da corrida, da lista do PAS 1, discute-se a relação entre velocidade, distância e tempo de um corredor.", "items": [{"n": 14, "t": "A", "s": "Mantido o mesmo ritmo de trabalho, 6 voluntários plantariam 1.200 mudas em 4 dias.", "a": "C", "e": "Ritmo = 600 ÷ (4 × 3) = 50 mudas por pessoa por dia. Então 6 × 4 × 50 = <b>1.200 mudas</b>."}, {"n": 15, "t": "A", "s": "Para percorrer uma distância fixa, a velocidade média de um corredor e o tempo gasto no percurso são grandezas diretamente proporcionais.", "a": "E", "e": "Com distância fixa, se a velocidade dobra, o tempo cai pela metade: o produto v · t = d é constante. São <b>inversamente</b> proporcionais."}, {"n": 16, "t": "C", "s": "Um corredor completa 10 km em 50 minutos. Mantendo o mesmo ritmo, o tempo necessário para ele completar uma meia maratona de 21 km será de", "o": ["1 h 35 min.", "1 h 40 min.", "1 h 45 min.", "1 h 50 min."], "a": "C", "e": "Regra de três direta: 10/50 = 21/t → t = 105 min = <b>1 h 45 min</b>."}]}, {"title": "Obras de arte e réplicas", "ctx": "A cúpula de Brunelleschi, na Catedral de Santa Maria del Fiore, em Florença, tem diâmetro interno de cerca de 45 m, e a altura total do edifício, até o topo da lanterna, é de 114 m. O grupo escultórico Laocoonte e seus filhos tem cerca de 2,08 m de altura.", "items": [{"n": 17, "t": "A", "s": "Em uma fotografia frontal em que o diâmetro da cúpula aparece com 3 cm, a altura total do edifício aparece com 7,6 cm.", "a": "C", "e": "Escala da foto = 3 cm ÷ 45 m. Altura: 114 × 3/45 = <b>7,6 cm</b>."}, {"n": 18, "t": "B", "s": "Uma réplica do Laocoonte feita na escala 1 : 8 tem altura, em centímetros, igual a", "a": "26", "e": "2,08 m = 208 cm. Então 208 ÷ 8 = <b>26 cm</b> (na folha de respostas: 026)."}]}, {"title": "Frações no dia a dia", "ctx": "Para uma receita de pão, usam-se 2/3 de 3/4 de um pacote de 1 kg de farinha de trigo. Em uma turma da 1.ª série, 3/5 dos estudantes fizeram a prova do PAS 1 e, desses, 1/4 obteve nota acima da média da turma.", "items": [{"n": 19, "t": "A", "s": "A quantidade de farinha usada na receita é de 600 g.", "a": "E", "e": "\"Fração de fração\" multiplica: 2/3 × 3/4 = 6/12 = 1/2. Metade de 1 kg = <b>500 g</b>."}, {"n": 20, "t": "C", "s": "Os estudantes que fizeram o PAS 1 e obtiveram nota acima da média correspondem, em relação ao total da turma, a", "o": ["12%.", "15%.", "20%.", "35%."], "a": "B", "e": "1/4 × 3/5 = 3/20 = <b>15%</b> da turma. Somar as frações (35%) ou usar só 1/4 (25%) são os erros comuns."}]}];
+const PTS={A:[1,-1],B:[2,0],C:[2,-0.667]};let res={};
+const fmt=x=>(Math.round(x*100)/100).toString().replace(".",",");
+function upd(){let ok=0,no=0,bl=0,p=0,mx=0,n=0;B.forEach(b=>b.items.forEach(it=>{n++;mx+=PTS[it.t][0];const r=res[it.n];if(!r)return;if(r==="ok"){ok++;p+=PTS[it.t][0]}else if(r==="no"){ok+=0;no++;p+=PTS[it.t][1]}else bl++;}));
+done.textContent=ok+no+bl;nok.textContent=ok;nno.textContent=no;nbl.textContent=bl;pts.textContent=fmt(p);
+const e=document.getElementById("end");if(ok+no+bl===n){e.classList.remove("hide");en.textContent=fmt(p)+" / "+mx;et.textContent=`${ok} acerto(s), ${no} erro(s), ${bl} em branco`;}else e.classList.add("hide");}
+function render(){const L=document.getElementById("list");L.innerHTML="";
+B.forEach(b=>{const d=document.createElement("div");d.className="card block";d.innerHTML=`<h2>${b.title}</h2><div class="ctx">${b.ctx}</div>`;
+b.items.forEach(it=>{const w=document.createElement("div");w.className="item";
+let opts=it.t==="A"?`<button data-v="C">Certo</button><button data-v="E">Errado</button>`:it.t==="C"?["A","B","C","D"].map(l=>`<button data-v="${l}">${l}</button>`).join(""):`<input inputmode="numeric" maxlength="3" placeholder="000"><button data-v="ok">Responder</button>`;
+w.innerHTML=`<div class="ih"><b>Item ${it.n}</b><span class="tag">${it.t==="A"?"Certo/Errado":it.t==="C"?"Múltipla escolha":"Numérico (000 a 999)"}</span></div><p class="st">${it.s}</p>${it.o?`<ul class="op">${it.o.map((x,i)=>`<li><b>${"ABCD"[i]})</b> ${x}</li>`).join("")}</ul>`:""}<div class="opts">${opts}<button class="blank" data-v="-">Em branco</button></div><div class="fb"></div>`;
+w.querySelectorAll(".opts button").forEach(x=>x.onclick=()=>{let v=x.dataset.v;if(v==="ok"){v=w.querySelector("input").value.trim();if(!v)return;v=String(parseInt(v,10));}answer(it,v,w,x)});d.appendChild(w)});L.appendChild(d)});upd();}
+function answer(it,v,w,btn){if(res[it.n])return;const s=v==="-"?"bl":(v===it.a?"ok":"no");res[it.n]=s;
+w.querySelectorAll("button,input").forEach(x=>{x.disabled=true;if(x.dataset.v===it.a)x.classList.add("right")});btn.classList.add("sel",s);
+const lab=it.t==="A"?(it.a==="C"?"Certo":"Errado"):it.t==="C"?"Alternativa "+it.a:it.a.padStart(3,"0");
+const p=s==="ok"?PTS[it.t][0]:s==="no"?PTS[it.t][1]:0;const f=w.querySelector(".fb");f.className="fb "+s;
+f.innerHTML=`<strong>${s==="ok"?"Acertou!":s==="no"?"Não foi dessa vez.":"Deixou em branco."} Gabarito: ${lab} · ${p>0?"+":""}${fmt(p)} ponto(s)</strong>${it.e}`;upd();}
+function tab(q){teoria.classList.toggle("hide",q);questoes.classList.toggle("hide",!q);tT.classList.toggle("on",!q);tQ.classList.toggle("on",q);window.scrollTo({top:0})}
+tT.onclick=()=>tab(false);tQ.onclick=()=>tab(true);goQ.onclick=()=>tab(true);
+again.onclick=()=>{res={};render();window.scrollTo({top:0,behavior:"smooth"})};render();
+</script></main><script src="config.js"></script>
+<script src="salvar.js"></script>
+</body></html>

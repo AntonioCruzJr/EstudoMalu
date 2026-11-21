@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Razão, proporção, escala e frações · Lista 2 · PAS 1</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1f2328;--muted:#5d646d;--line:#e3e0d8;--accent:#1d5fa8;--soft:#eaf1fa;--ok:#1f7a45;--okbg:#e7f5ec;--no:#b3261e;--nobg:#fcebea;--bl:#8a6d1d;--blbg:#fbf3dc}
+@media (prefers-color-scheme:dark){:root{--bg:#16181b;--card:#1f2226;--ink:#e8e6e1;--muted:#a3a8ae;--line:#33373c;--accent:#6aa5e8;--soft:#1c2a3a;--ok:#5cc58a;--okbg:#17301f;--no:#f08a82;--nobg:#3a1c1a;--bl:#e0c070;--blbg:#3a321a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:780px;margin:0 auto;padding:18px 14px 60px}
+h1{font-size:1.4rem;margin:4px 0}.sub{color:var(--muted);margin:0 0 14px;font-size:.95rem}
+.tabs{display:flex;gap:8px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5;border-bottom:1px solid var(--line);margin-bottom:14px}
+.tabs button{flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:.98rem;cursor:pointer}
+.tabs button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 14px}
+details.sec>summary{cursor:pointer;font-weight:800;font-size:1.08rem;list-style:none}
+details.sec>summary::before{content:"▸ ";color:var(--accent)}details.sec[open]>summary::before{content:"▾ "}
+h3{font-size:1rem;margin:14px 0 4px;color:var(--accent)}
+.box{background:var(--soft);border-radius:10px;padding:10px 12px;margin:8px 0}
+.ex{border-left:3px solid var(--accent);padding:4px 0 4px 12px;margin:8px 0}
+.warn{background:var(--blbg);border-radius:10px;padding:10px 12px;margin:8px 0}
+table{border-collapse:collapse;width:100%;font-size:.93rem;margin:6px 0}td,th{border:1px solid var(--line);padding:6px 8px;text-align:left}th{background:var(--soft)}
+.f{font-family:"Cambria Math","STIX Two Math",Georgia,serif;font-size:1.05em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.9em;margin:0 2px}.frac span:first-child{border-bottom:1px solid currentColor;padding:0 2px}
+.rules{font-size:.88rem;color:var(--muted);margin:0 0 12px}
+.stat{display:flex;justify-content:space-between;font-size:.9rem;color:var(--muted);margin-bottom:12px}.stat b{color:var(--ink)}
+.lvl{font-weight:800;font-size:1.1rem;margin:18px 0 8px}.block h2{font-size:1.05rem;margin:0 0 6px}.ctx{font-size:.95rem;background:var(--soft);border-radius:10px;padding:10px 12px;margin-bottom:6px}
+.item{border-top:1px solid var(--line);padding:12px 0 4px}
+.ih{font-size:.82rem;color:var(--muted);margin-bottom:4px}.ih b{color:var(--ink)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:0 6px;border-radius:6px;border:1px solid var(--line);margin-left:6px}
+.st{margin:0 0 8px}.op{margin:2px 0 8px 0;padding-left:0;list-style:none}.op li{margin:2px 0}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts button{flex:1;min-width:58px;min-height:44px;border-radius:10px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font-weight:700;font-size:1rem;cursor:pointer}
+.opts button.blank{flex:0 0 auto;padding:0 12px;font-weight:600;color:var(--muted)}
+.opts input{flex:1;min-width:110px;min-height:44px;border-radius:10px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font-size:1.1rem;padding:0 12px;letter-spacing:.2em}
+.opts button.sel.ok{background:var(--ok);border-color:var(--ok);color:#fff}.opts button.sel.no{background:var(--no);border-color:var(--no);color:#fff}.opts button.sel.bl{background:var(--bl);border-color:var(--bl);color:#fff}
+.opts button.right{border-color:var(--ok);color:var(--ok)}.opts button:disabled,.opts input:disabled{cursor:default}
+.fb{display:none;margin-top:10px;border-radius:10px;padding:10px 12px;font-size:.95rem}
+.fb.ok{display:block;background:var(--okbg)}.fb.no{display:block;background:var(--nobg)}.fb.bl{display:block;background:var(--blbg)}.fb strong{display:block;margin-bottom:3px}
+.end{text-align:center}.end .n{font-size:2.2rem;font-weight:800;color:var(--accent)}
+.btn{margin-top:10px;padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:700;font-size:1rem;cursor:pointer}
+.hide{display:none}
+</style></head><body><main>
+<h1>Razão, proporção, escala e frações · Lista 2</h1>
+<p class="sub">Matemática · PAS 1 UnB. Teoria resumida e 30 itens no estilo Cebraspe, com correção e explicação.</p>
+<div class="tabs"><button id="tT" class="on">📘 Teoria</button><button id="tQ">✏️ 30 questões</button></div>
+
+<section id="teoria">
+<details class="sec card" open><summary>1. Razão</summary>
+<p>Razão é a comparação de duas grandezas por <b>divisão</b>: a razão entre a e b (b ≠ 0) é <span class="f">a : b</span> ou <span class="f"><span class="frac"><span>a</span><span>b</span></span></span>. A ordem importa: "razão entre A e B" é A ÷ B.</p>
+<div class="ex"><b>Exemplo.</b> Uma turma tem 12 meninos e 18 meninas. Razão meninos/meninas = 12/18 = <b>2/3</b>. Razão meninos/total = 12/30 = <b>2/5 = 40%</b>.</div>
+<h3>Razões especiais (caem muito)</h3>
+<table><tr><th>Nome</th><th>Razão</th><th>Exemplo</th></tr>
+<tr><td>Velocidade média</td><td>distância ÷ tempo</td><td>150 km em 2 h = 75 km/h</td></tr>
+<tr><td>Densidade</td><td>massa ÷ volume</td><td>1.000 g em 1 L = 1 kg/L</td></tr>
+<tr><td>Densidade demográfica</td><td>habitantes ÷ área</td><td>3 milhões em 5.760 km² ≈ 521 hab/km²</td></tr>
+<tr><td>Escala</td><td>medida no desenho ÷ medida real</td><td>1 cm : 100.000 cm</td></tr>
+<tr><td>Porcentagem</td><td>parte ÷ 100</td><td>35% = 35/100 = 0,35</td></tr></table>
+<div class="warn"><b>Armadilha:</b> antes de dividir, coloque as grandezas na <b>mesma unidade</b> (cm com cm, minutos com minutos). Razão entre 30 min e 2 h é 30/120 = 1/4, não 30/2.</div>
+</details>
+
+<details class="sec card"><summary>2. Proporção e propriedade fundamental</summary>
+<p>Proporção é a <b>igualdade de duas razões</b>: <span class="f"><span class="frac"><span>a</span><span>b</span></span> = <span class="frac"><span>c</span><span>d</span></span></span>.</p>
+<div class="box"><b>Propriedade fundamental:</b> o produto dos meios é igual ao produto dos extremos: <span class="f">a · d = b · c</span> ("multiplicar cruzado").</div>
+<div class="ex"><b>Exemplo.</b> <span class="f"><span class="frac"><span>3</span><span>5</span></span> = <span class="frac"><span>x</span><span>40</span></span></span> → 5x = 120 → <b>x = 24</b>.</div>
+<h3>Propriedade da soma</h3>
+<p>Se <span class="f">a/b = c/d = k</span>, então <span class="f">(a + c)/(b + d) = k</span>. É ela que resolve a divisão proporcional.</p>
+</details>
+
+<details class="sec card"><summary>3. Grandezas direta e inversamente proporcionais</summary>
+<table><tr><th></th><th>Diretamente proporcionais</th><th>Inversamente proporcionais</th></tr>
+<tr><td>Comportamento</td><td>uma dobra → a outra dobra</td><td>uma dobra → a outra cai pela metade</td></tr>
+<tr><td>O que é constante</td><td><b>o quociente</b> y/x = k</td><td><b>o produto</b> x · y = k</td></tr>
+<tr><td>Gráfico</td><td>reta pela origem (função afim y = kx)</td><td>hipérbole (y = k/x)</td></tr>
+<tr><td>Exemplos</td><td>quantidade × preço; tempo × distância (velocidade fixa)</td><td>velocidade × tempo (distância fixa); nº de operários × prazo</td></tr></table>
+<h3>Regra de três simples</h3>
+<div class="ex"><b>Direta.</b> 3 kg custam R$ 24; 5 kg custam? 3/24 = 5/x → <b>x = R$ 40</b>.</div>
+<div class="ex"><b>Inversa.</b> A 60 km/h, a viagem dura 4 h. A 80 km/h? Produto constante: 60 · 4 = 80 · t → <b>t = 3 h</b>.</div>
+<h3>Regra de três composta</h3>
+<p>Monte uma tabela, compare cada grandeza com a <b>incógnita</b> (direta ou inversa) e inverta as razões inversas.</p>
+<div class="ex"><b>Exemplo.</b> 4 pessoas plantam 600 mudas em 3 dias. Quantas mudas 6 pessoas plantam em 5 dias? Mais pessoas → mais mudas (direta); mais dias → mais mudas (direta). x = 600 · (6/4) · (5/3) = <b>1.500 mudas</b>.<br>Atalho: ritmo = 600 ÷ (4·3) = 50 mudas por pessoa por dia → 50 · 6 · 5 = 1.500.</div>
+<div class="warn"><b>Armadilha do PAS:</b> o item diz "são diretamente proporcionais" para grandezas que são <b>inversas</b> (ex.: velocidade e tempo de viagem). Sempre teste: "se uma dobra, o que acontece com a outra?".</div>
+</details>
+
+<details class="sec card"><summary>4. Divisão proporcional</summary>
+<h3>Diretamente proporcional</h3>
+<p>Dividir N em partes proporcionais a a, b, c: cada parte é <span class="f">k·a, k·b, k·c</span>, com <span class="f">k = N ÷ (a + b + c)</span>.</p>
+<div class="ex">Dividir R$ 900 entre 2, 3 e 4: k = 900/9 = 100 → <b>200, 300 e 400</b>.</div>
+<h3>Inversamente proporcional</h3>
+<p>Divida proporcionalmente aos <b>inversos</b> 1/a, 1/b, 1/c.</p>
+<div class="ex">Dividir R$ 900 inversamente a 2, 3 e 6: k(1/2 + 1/3 + 1/6) = 900 → k = 900 → <b>450, 300 e 150</b>. Quem tem o maior número recebe menos.</div>
+<h3>Sociedade (capital × tempo)</h3>
+<p>Lucro dividido proporcionalmente ao produto <b>capital × tempo</b> de cada sócio (erro que apareceu no Enem 2026 da Malu, Q143).</p>
+</details>
+
+<details class="sec card"><summary>5. Escala: linear, de área e de volume</summary>
+<div class="box"><b>Escala = medida no desenho ÷ medida real</b>, nas mesmas unidades. 1 : 50.000 significa 1 cm no mapa = 50.000 cm = 500 m no real.</div>
+<h3>Conversões úteis</h3>
+<table><tr><td>1 km = 1.000 m = 100.000 cm</td><td>1 km² = 10<sup>10</sup> cm²</td></tr><tr><td>1 m = 100 cm</td><td>1 m² = 10.000 cm² · 1 m³ = 1.000 L</td></tr></table>
+<div class="ex">Mapa 1 : 250.000, distância de 8 cm → 8 · 250.000 = 2.000.000 cm = <b>20 km</b>.</div>
+<h3>A regra de ouro: k, k², k³</h3>
+<table><tr><th>Se a razão linear é k</th><th>a razão é</th><th>Exemplo com k = 1/10</th></tr>
+<tr><td>Comprimentos</td><td><b>k</b></td><td>1/10</td></tr><tr><td>Áreas</td><td><b>k²</b></td><td>1/100</td></tr><tr><td>Volumes (e massas, se mesmo material)</td><td><b>k³</b></td><td>1/1.000</td></tr></table>
+<div class="ex">Uma maquete na escala 1 : 200 tem área 1/40.000 da área real. Passar de 1 : 400 para 1 : 200 <b>dobra</b> os comprimentos e <b>quadruplica</b> a área.</div>
+<div class="warn"><b>Armadilha:</b> se a área ficou 100 vezes menor, a escala linear é 1 : 10, e não 1 : 100 (erro da Malu no Enem 2026, Q168).</div>
+</details>
+
+<details class="sec card"><summary>6. Frações</summary>
+<h3>Operações</h3>
+<table><tr><td>Soma/subtração</td><td>iguale os denominadores (MMC): 1/4 + 1/6 = 3/12 + 2/12 = <b>5/12</b></td></tr>
+<tr><td>Multiplicação</td><td>numerador × numerador, denominador × denominador: 2/3 · 3/4 = 6/12 = <b>1/2</b></td></tr>
+<tr><td>Divisão</td><td>multiplique pelo inverso: (3/4) ÷ (1/8) = 3/4 · 8 = <b>6</b></td></tr>
+<tr><td>"Fração de"</td><td>"de" = multiplicação: 3/5 de 200 = <b>120</b></td></tr></table>
+<h3>Fração de fração</h3>
+<div class="ex">3/5 da turma fez o PAS e 1/3 desses passou da média → 1/3 · 3/5 = <b>1/5 = 20% da turma</b> (não 1/3!).</div>
+<h3>Frações ↔ decimais ↔ porcentagens</h3>
+<table><tr><td>1/2 = 0,5 = 50%</td><td>1/4 = 25%</td><td>3/4 = 75%</td><td>1/5 = 20%</td></tr><tr><td>1/8 = 12,5%</td><td>1/3 ≈ 33,3%</td><td>2/3 ≈ 66,7%</td><td>1/20 = 5%</td></tr></table>
+<h3>Aumentos e descontos (fator multiplicativo)</h3>
+<p>Aumentar p% → multiplicar por (1 + p/100). Reduzir p% → multiplicar por (1 − p/100). Reduzir 12% = <b>× 0,88</b> (erro da Malu no Enem 2026, Q158). Dois aumentos de 10% = × 1,1 × 1,1 = × 1,21 → <b>21%</b>, não 20%.</p>
+<h3>Frações na música (o PAS adora)</h3>
+<table><tr><th>Figura</th><th>Duração (semibreve = 1)</th></tr>
+<tr><td>Semibreve</td><td>1</td></tr><tr><td>Mínima</td><td>1/2</td></tr><tr><td>Semínima</td><td>1/4</td></tr><tr><td>Colcheia</td><td>1/8</td></tr><tr><td>Semicolcheia</td><td>1/16</td></tr></table>
+<p>O <b>ponto de aumento</b> soma metade da duração: semínima pontuada = 1/4 + 1/8 = 3/8. A fórmula de compasso também é fração: <b>3/4</b> = três semínimas por compasso.</p>
+</details>
+
+<div class="card"><b>Checklist antes de marcar no PAS</b><br>1. As unidades são iguais? 2. É direta ou inversa? 3. Escala de área/volume usa k² e k³. 4. "Fração de fração" multiplica. 5. Na dúvida no Certo/Errado, deixe em branco.</div>
+<button class="btn" id="goQ">Ir para as 30 questões →</button>
+</section>
+
+<section id="questoes" class="hide">
+<p class="rules"><b>Pontuação do PAS:</b> Certo/Errado: +1 / <b>−1</b>. Múltipla escolha: +2 / <b>−0,67</b>. Numérico: +2 / 0. Em branco: 0.</p>
+<div class="stat"><span><b id="done">0</b> de 30 · ✅ <b id="nok">0</b> · ❌ <b id="nno">0</b> · ⬜ <b id="nbl">0</b></span><span>Pontos: <b id="pts">0</b></span></div>
+<div id="list"></div>
+<div class="card end hide" id="end"><div class="n" id="en"></div><div id="et"></div><button class="btn" id="again">Refazer</button></div>
+</section>
+<script>
+const B=[{"nivel": "🟢 Nível 1 · Fácil (itens 1 a 10)", "title": "Escala em mapas", "ctx": "Um mapa rodoviário de Goiás foi feito na escala 1 : 100.000.", "items": [{"t": "A", "s": "Uma distância de 5 cm nesse mapa corresponde a 5 km na realidade.", "a": "C", "e": "5 × 100.000 = 500.000 cm = <b>5 km</b> (1 km = 100.000 cm).", "n": 1}, {"t": "A", "s": "Uma estrada reta de 12 km aparece no mapa com 1,2 cm.", "a": "E", "e": "12 km = 1.200.000 cm. 1.200.000 ÷ 100.000 = <b>12 cm</b>, e não 1,2 cm. Cuidado com a conversão km → cm (multiplica por 100.000).", "n": 2}]}, {"nivel": "🟢 Nível 1 · Fácil (itens 1 a 10)", "title": "Razão e porcentagem", "ctx": "Uma turma da 1.ª série tem 16 meninos e 24 meninas.", "items": [{"t": "A", "s": "A razão entre o número de meninos e o de meninas é 2/3.", "a": "C", "e": "16/24 = <b>2/3</b> (dividindo por 8).", "n": 3}, {"t": "A", "s": "As meninas representam 40% da turma.", "a": "E", "e": "Total = 40. Meninas: 24/40 = <b>60%</b>. Os 40% são os meninos.", "n": 4}]}, {"nivel": "🟢 Nível 1 · Fácil (itens 1 a 10)", "title": "Frações na música", "ctx": "Tomando a semibreve como unidade, a mínima vale 1/2, a semínima 1/4, a colcheia 1/8 e a semicolcheia 1/16.", "items": [{"t": "A", "s": "Duas colcheias têm a mesma duração que uma semínima.", "a": "C", "e": "1/8 + 1/8 = 2/8 = <b>1/4</b> = uma semínima.", "n": 5}, {"t": "C", "s": "O número de semínimas que equivalem, em duração, a uma semibreve é", "o": ["2.", "4.", "8.", "16."], "a": "B", "e": "1 ÷ 1/4 = <b>4</b> semínimas.", "n": 6}]}, {"nivel": "🟢 Nível 1 · Fácil (itens 1 a 10)", "title": "Regra de três e porcentagem", "ctx": "Julgue os itens a seguir, que envolvem situações do cotidiano.", "items": [{"t": "A", "s": "Se 3 kg de pequi custam R$ 24, então 5 kg custarão R$ 40.", "a": "C", "e": "Preço por kg: 24 ÷ 3 = 8. Então 5 × 8 = <b>R$ 40</b> (grandezas diretamente proporcionais).", "n": 7}, {"t": "A", "s": "25% de 240 é igual a 80.", "a": "E", "e": "25% = 1/4. 240 ÷ 4 = <b>60</b>. (80 seria 1/3 de 240.)", "n": 8}, {"t": "A", "s": "Um carro faz uma viagem em 4 horas a 60 km/h. Se a velocidade média for de 80 km/h, a mesma viagem durará 3 horas.", "a": "C", "e": "Distância = 60 × 4 = 240 km. 240 ÷ 80 = <b>3 h</b>. Velocidade e tempo são inversamente proporcionais.", "n": 9}, {"t": "B", "s": "Uma praça quadrada com 120 m de lado foi desenhada em uma planta na escala 1 : 400. Calcule, em centímetros, o perímetro da praça na planta.", "a": "120", "e": "Lado: 12.000 cm ÷ 400 = 30 cm. Perímetro: 4 × 30 = <b>120 cm</b>.", "n": 10}]}, {"nivel": "🟡 Nível 2 · Intermediário (itens 11 a 20)", "title": "Maquete da Catedral de Brasília", "ctx": "A Catedral Metropolitana de Brasília, projetada por Oscar Niemeyer, tem cerca de 40 m de altura e base circular com 60 m de diâmetro. Um estudante fez uma maquete da catedral na escala 1 : 250.", "items": [{"t": "A", "s": "A altura da maquete é de 16 cm.", "a": "C", "e": "40 m = 4.000 cm. 4.000 ÷ 250 = <b>16 cm</b>.", "n": 11}, {"t": "A", "s": "A área da base circular da maquete é igual a 1/250 da área da base real da catedral.", "a": "E", "e": "Áreas usam k²: (1/250)² = <b>1/62.500</b>. A razão 1/250 vale só para comprimentos (altura, diâmetro).", "n": 12}]}, {"nivel": "🟡 Nível 2 · Intermediário (itens 11 a 20)", "title": "Planta de Brasília", "ctx": "Em uma planta do Plano Piloto de Brasília na escala 1 : 40.000, o Eixo Rodoviário (Eixão), com cerca de 14 km, aparece em linha reta. O Lago Paranoá tem área aproximada de 48 km².", "items": [{"t": "A", "s": "Na planta, o Eixão mede 35 cm.", "a": "C", "e": "14 km = 1.400.000 cm. 1.400.000 ÷ 40.000 = <b>35 cm</b>.", "n": 13}, {"t": "A", "s": "Nessa planta, o Lago Paranoá ocupa área superior a 400 cm².", "a": "E", "e": "1 cm na planta = 0,4 km, logo 1 cm² = 0,4² = <b>0,16 km²</b>. Então 48 ÷ 0,16 = <b>300 cm²</b>.", "n": 14}]}, {"nivel": "🟡 Nível 2 · Intermediário (itens 11 a 20)", "title": "População do Distrito Federal", "ctx": "Considere que o Distrito Federal tenha 2,88 milhões de habitantes em 5.760 km² e que a região administrativa de Ceilândia tenha 350 mil habitantes.", "items": [{"t": "A", "s": "A densidade demográfica do Distrito Federal é de 500 habitantes por quilômetro quadrado.", "a": "C", "e": "2.880.000 ÷ 5.760 = <b>500 hab/km²</b>.", "n": 15}, {"t": "C", "s": "A população de Ceilândia corresponde, aproximadamente, a que percentual da população do DF?", "o": ["8%", "10%", "12%", "15%"], "a": "C", "e": "350.000 ÷ 2.880.000 ≈ 0,1215 ≈ <b>12%</b>.", "n": 16}]}, {"nivel": "🟡 Nível 2 · Intermediário (itens 11 a 20)", "title": "Traço do concreto", "ctx": "Em uma obra, o concreto é preparado no traço 1 : 2 : 3, em volume: para cada parte de cimento, 2 partes de areia e 3 partes de brita.", "items": [{"t": "A", "s": "Para preparar 60 L dessa mistura, são necessários 20 L de areia.", "a": "C", "e": "1 + 2 + 3 = 6 partes → cada parte = 10 L. Areia = 2 × 10 = <b>20 L</b>.", "n": 17}, {"t": "A", "s": "A razão entre o volume de brita e o volume de cimento é igual a 1/3.", "a": "E", "e": "Brita ÷ cimento = 3 ÷ 1 = <b>3</b>. O 1/3 é a razão inversa. A ordem da razão importa!", "n": 18}, {"t": "B", "s": "Se forem usados 45 L de areia, mantido o traço, calcule, em litros, o volume total da mistura.", "a": "135", "e": "2 partes = 45 L → 1 parte = 22,5 L. Total = 6 × 22,5 = <b>135 L</b>.", "n": 19}]}, {"nivel": "🟡 Nível 2 · Intermediário (itens 11 a 20)", "title": "Divisão proporcional", "ctx": "Três sócios abriram uma cooperativa de frutos do Cerrado. Ana investiu R$ 10.000 por 6 meses, Bruno investiu R$ 20.000 por 4 meses e Carla investiu R$ 30.000 por 2 meses. O lucro de R$ 26.000 será dividido em partes proporcionais ao produto capital × tempo de cada um.", "items": [{"t": "A", "s": "Bruno receberá R$ 10.400.", "a": "C", "e": "Produtos: Ana 60.000, Bruno 80.000, Carla 60.000 (total 200.000). k = 26.000 ÷ 200.000 = 0,13. Bruno: 80.000 × 0,13 = <b>R$ 10.400</b>. Quem dividiu só pelo capital daria a Bruno 1/3 do lucro.", "n": 20}]}, {"nivel": "🔴 Nível 3 · Difícil (itens 21 a 30)", "title": "Mapas e imagens de satélite", "ctx": "Julgue os itens a seguir, relativos a mapas e imagens usados no monitoramento do Cerrado. Considere que 1 hectare (ha) corresponde a 10.000 m².", "items": [{"t": "A", "s": "Uma fazenda que ocupa 18 cm² em um mapa na escala 1 : 50.000 tem área real de 450 ha.", "a": "C", "e": "1 cm no mapa = 50.000 cm = 500 m. Logo 1 cm² = 500² = 250.000 m² = <b>25 ha</b>. Então 18 × 25 = <b>450 ha</b>.", "n": 21}, {"t": "B", "s": "Em uma imagem de satélite, um trecho retilíneo de 3 km do rio São Francisco aparece com 6 cm. Sendo 1 : N a escala da imagem, calcule N/1.000.", "a": "50", "e": "3 km = 300.000 cm. N = 300.000 ÷ 6 = 50.000 → N/1.000 = <b>50</b> (na folha: 050).", "n": 22}]}, {"nivel": "🔴 Nível 3 · Difícil (itens 21 a 30)", "title": "Volumes e massas de réplicas", "ctx": "Em modelos e réplicas semelhantes ao original, os volumes variam com o cubo da escala. Em réplicas maciças do mesmo material, a massa é proporcional ao volume.", "items": [{"t": "A", "s": "Um modelo de um reservatório de água, construído na escala 1 : 50, tem capacidade de 2 L. Então, a capacidade do reservatório real é de 250 m³.", "a": "C", "e": "Volumes usam k³: 50³ = 125.000. 2 L × 125.000 = 250.000 L. Como 1 m³ = 1.000 L, isso dá <b>250 m³</b>.", "n": 23}, {"t": "A", "s": "Se uma estátua maciça tem massa de 1.024 kg, uma réplica maciça do mesmo material, na escala 1 : 8, terá massa de 2 kg.", "a": "C", "e": "Massa ∝ volume ∝ k³. k = 1/8 → k³ = 1/512. 1.024 ÷ 512 = <b>2 kg</b>. Quem dividiu por 8 (128 kg) ou por 64 (16 kg) esqueceu o cubo.", "n": 24}]}, {"nivel": "🔴 Nível 3 · Difícil (itens 21 a 30)", "title": "Grandezas inversas e regra de três composta", "ctx": "Julgue os itens a seguir, que envolvem trabalho e produção em ritmo constante.", "items": [{"t": "A", "s": "Uma torneira enche sozinha uma caixa-d’água em 6 horas, e outra a enche sozinha em 3 horas. Abertas juntas, elas encherão a caixa em 4 horas e 30 minutos.", "a": "E", "e": "Por hora: 1/6 + 1/3 = 1/2 da caixa → juntas em <b>2 horas</b>. Fazer a média dos tempos é o erro clássico.", "n": 25}, {"t": "C", "s": "Oito colheitadeiras iguais colhem um talhão de soja em 15 dias. Para colher o mesmo talhão em 12 dias, no mesmo ritmo, são necessárias", "o": ["10 colheitadeiras.", "9 colheitadeiras.", "12 colheitadeiras.", "6 colheitadeiras."], "a": "A", "e": "Máquinas e dias são inversos: 8 × 15 = n × 12 → n = <b>10</b>.", "n": 26}, {"t": "A", "s": "Se 4 voluntários plantam 600 mudas em 3 dias, então, no mesmo ritmo, são necessários 6 voluntários para plantar 1.500 mudas em 5 dias.", "a": "C", "e": "Ritmo: 600 ÷ (4 × 3) = 50 mudas por pessoa por dia. Voluntários = 1.500 ÷ (50 × 5) = <b>6</b>.", "n": 27}]}, {"nivel": "🔴 Nível 3 · Difícil (itens 21 a 30)", "title": "Porcentagens e frações sucessivas", "ctx": "Julgue os itens a seguir, que envolvem variações sucessivas.", "items": [{"t": "A", "s": "Se o preço de um produto aumentar 25% e, em seguida, o novo preço diminuir 20%, o produto voltará a custar o preço original.", "a": "C", "e": "1,25 × 0,80 = <b>1,00</b>. Volta ao preço original.", "n": 28}, {"t": "A", "s": "Se a população de uma cidade crescer 10% em um ano e mais 10% no ano seguinte, o crescimento acumulado será de 20%.", "a": "E", "e": "Fatores se multiplicam: 1,1 × 1,1 = 1,21 → <b>21%</b>.", "n": 29}, {"t": "C", "s": "De uma área de Cerrado, 2/5 foram desmatados; depois, foi desmatado 1/3 do que restava. Mais tarde, metade de toda a área desmatada foi recuperada. A fração da área original que permanece desmatada é", "o": ["1/5.", "3/10.", "2/5.", "3/5."], "a": "B", "e": "Restavam 3/5; 1/3 disso = 1/5. Desmatado total: 2/5 + 1/5 = 3/5. Recuperada a metade: 3/5 × 1/2 = <b>3/10</b>.", "n": 30}]}];
+const PTS={A:[1,-1],B:[2,0],C:[2,-0.667]};let res={};
+const fmt=x=>(Math.round(x*100)/100).toString().replace(".",",");
+function upd(){let ok=0,no=0,bl=0,p=0,mx=0,n=0;B.forEach(b=>b.items.forEach(it=>{n++;mx+=PTS[it.t][0];const r=res[it.n];if(!r)return;if(r==="ok"){ok++;p+=PTS[it.t][0]}else if(r==="no"){ok+=0;no++;p+=PTS[it.t][1]}else bl++;}));
+done.textContent=ok+no+bl;nok.textContent=ok;nno.textContent=no;nbl.textContent=bl;pts.textContent=fmt(p);
+const e=document.getElementById("end");if(ok+no+bl===n){e.classList.remove("hide");en.textContent=fmt(p)+" / "+mx;et.textContent=`${ok} acerto(s), ${no} erro(s), ${bl} em branco`;}else e.classList.add("hide");}
+function render(){const L=document.getElementById("list");L.innerHTML="";
+B.forEach(b=>{const d=document.createElement("div");d.className="card block";d.innerHTML=`<h2>${b.title}</h2><div class="ctx">${b.ctx}</div>`;
+b.items.forEach(it=>{const w=document.createElement("div");w.className="item";
+let opts=it.t==="A"?`<button data-v="C">Certo</button><button data-v="E">Errado</button>`:it.t==="C"?["A","B","C","D"].map(l=>`<button data-v="${l}">${l}</button>`).join(""):`<input inputmode="numeric" maxlength="3" placeholder="000"><button data-v="ok">Responder</button>`;
+w.innerHTML=`<div class="ih"><b>Item ${it.n}</b><span class="tag">${it.t==="A"?"Certo/Errado":it.t==="C"?"Múltipla escolha":"Numérico (000 a 999)"}</span></div><p class="st">${it.s}</p>${it.o?`<ul class="op">${it.o.map((x,i)=>`<li><b>${"ABCD"[i]})</b> ${x}</li>`).join("")}</ul>`:""}<div class="opts">${opts}<button class="blank" data-v="-">Em branco</button></div><div class="fb"></div>`;
+w.querySelectorAll(".opts button").forEach(x=>x.onclick=()=>{let v=x.dataset.v;if(v==="ok"){v=w.querySelector("input").value.trim();if(!v)return;v=String(parseInt(v,10));}answer(it,v,w,x)});d.appendChild(w)});L.appendChild(d)});upd();}
+function answer(it,v,w,btn){if(res[it.n])return;const s=v==="-"?"bl":(v===it.a?"ok":"no");res[it.n]=s;
+w.querySelectorAll("button,input").forEach(x=>{x.disabled=true;if(x.dataset.v===it.a)x.classList.add("right")});btn.classList.add("sel",s);
+const lab=it.t==="A"?(it.a==="C"?"Certo":"Errado"):it.t==="C"?"Alternativa "+it.a:it.a.padStart(3,"0");
+const p=s==="ok"?PTS[it.t][0]:s==="no"?PTS[it.t][1]:0;const f=w.querySelector(".fb");f.className="fb "+s;
+f.innerHTML=`<strong>${s==="ok"?"Acertou!":s==="no"?"Não foi dessa vez.":"Deixou em branco."} Gabarito: ${lab} · ${p>0?"+":""}${fmt(p)} ponto(s)</strong>${it.e}`;upd();}
+function tab(q){teoria.classList.toggle("hide",q);questoes.classList.toggle("hide",!q);tT.classList.toggle("on",!q);tQ.classList.toggle("on",q);window.scrollTo({top:0})}
+tT.onclick=()=>tab(false);tQ.onclick=()=>tab(true);goQ.onclick=()=>tab(true);
+again.onclick=()=>{res={};render();window.scrollTo({top:0,behavior:"smooth"})};render();
+</script></main><script src="config.js"></script>
+<script src="salvar.js"></script>
+</body></html>
