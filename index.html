@@ -18,6 +18,6 @@ a.ex:hover{border-color:var(--accent)}a.ex b{display:block;font-size:1.02rem}a.e
 fetch("exercicios.json",{cache:"no-store"}).then(r=>r.json()).then(L=>{
  const by={};L.forEach(e=>(by[e.materia]=by[e.materia]||[]).push(e));
  const esc=s=>String(s).replace(/[<>&"]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]));
- document.getElementById("lista").innerHTML=Object.keys(by).map(m=>`<h2>${esc(m)}</h2>`+by[m].map(e=>`<a class="ex" href="${encodeURI(e.arquivo)}"><b>${esc(e.titulo)}</b><span>${e.itens} itens · ${esc(e.descricao||"")}</span></a>`).join("")).join("");
+ document.getElementById("lista").innerHTML=Object.keys(by).map(m=>`<h2>${esc(m)}</h2>`+by[m].map(e=>`<a class="ex" href="${encodeURI(e.arquivo)}"><b>${esc(e.titulo)}</b><span>${e.itens?e.itens+" itens · ":"Aula narrada · "}${esc(e.descricao||"")}</span></a>`).join("")).join("");
 }).catch(()=>{document.getElementById("lista").textContent="Não foi possível carregar a lista de exercícios."});
 </script></body></html>

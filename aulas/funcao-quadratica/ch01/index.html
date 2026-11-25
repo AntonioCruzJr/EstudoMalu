@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Função quadrática</title>
+<link rel="stylesheet" href="../lib/engine.css">
+<link rel="expect" href="#bar" blocking="render"><!-- hold the first frame until the player exists, so the page transition can run -->
+</head>
+<body>
+<script src="../lib/engine.js"></script>
+<script src="../lib/math.js"></script>
+<script src="audio/pt/timings.js"></script>
+<script>
+'use strict';
+const CHAPTER = { number: 1, title: 'Função quadrática', minutes: 6, language: 'pt' };
+
+/* ---------- colours that mean something (style.json look.meaning) ---------- */
+const A_C = COL.nat, B_C = COL.whole, C_C = COL.int, D_C = COL.real, R_C = COL.irr, V_C = COL.rat;
+
+/* ---------- the chapter's example: f(x) = x² − 6x + 5 ---------- */
+const fq = x => x * x - 6 * x + 5;
+const PL = { cx: 1060, cy: 470, u: 52, x0: -1, x1: 7, y0: -5, y1: 6 };
+const LX = 120;   // left edge of the text column
+
+/* ---------- drawing helpers (prefixed or chapter-only names: math.js owns rect, frac, plane, ...) ---------- */
+// A row of mixed pieces laid left to right: 'math' | [parts] | {m, fill} | {sub: [base, index], fill} | {t: 'texto', fill} | {gap}.
+// Returns a group with _w and _items (each piece's x and width inside the row).
+function mrow(p, items, { x = 0, y = 0, size = 44, anchor = 'start', fill = COL.chalk, t0, o = 0 } = {}) {
+  const g = G(p, { o });
+  let cx = 0;
+  g._items = [];
+  // a bare part (F, E, R, TX) joins the plain item before it, so x and E(2) make one x²
+  const raw = it => it && typeof it === 'object' && !Array.isArray(it) && (it.f || it.sup !== undefined || it.r !== undefined || it.tex !== undefined);
+  const list = [];
+  for (const it of items) {
+    if (raw(it) && list.length && list[list.length - 1]._raw) list[list.length - 1].m.push(it);
+    else if (typeof it === 'string' || Array.isArray(it) || raw(it)) list.push({ m: [].concat(it), _raw: true });
+    else list.push(it);
+  }
+  for (let it of list) {
+    const c = it.fill || fill;
+    let w = 0;
+    if (it.m !== undefined) w = M(g, [].concat(it.m), { x: cx, size, fill: c, anchor: 'start' })._w;
+    else if (it.sub) {
+      const b = M(g, [it.sub[0]], { x: cx, size, fill: c, anchor: 'start' });
+      const s = T(g, it.sub[1], { x: cx + b._w + 1, y: size * .3, size: size * .6, fill: c, font: MATH });
+      w = b._w + 4 + s.getComputedTextLength();
+    } else if (it.t !== undefined) {
+      const s = T(g, it.t, { x: cx, y: 0, size: it.size || size * .7, fill: c, weight: it.weight || 500 });
+      w = s.getComputedTextLength();
+    } else if (it.gap) w = it.gap;
+    g._items.push({ x: cx, w });
+    cx += w;
+  }
+  g._w = cx;
+  const x0 = anchor === 'middle' ? x - cx / 2 : anchor === 'end' ? x - cx : x;
+  put(g, { x: x0, y, o });
+  g._x0 = x0;
+  if (t0 !== undefined) show(g, t0);
+  return g;
+}
+const itemX = (g, i) => g._x0 + g._items[i].x + g._items[i].w / 2;   // centre of a piece on the stage
+const kick = (p, str, t0 = .15, x = LX, anchor = 'start') =>
+  { const e = T(p, str, { x, y: 100, size: 26, fill: COL.dim, weight: 600, anchor, o: 0 }); show(e, t0); return e; };
+const note = (p, str, x, y, t0, { size = 28, fill = COL.dim, anchor = 'start', weight = 500 } = {}) =>
+  { const e = T(p, str, { x, y, size, fill, anchor, weight, o: 0 }); show(e, t0); return e; };
+// One step of a derivation aligned on its '=' at xEq.
+const XEQ = 214;
+function eqRow(p, L, R, y, t0, { size = 46, xEq = XEQ } = {}) {
+  const g = G(p, { o: 0 });
+  if (L) mrow(g, L, { x: xEq - size * .45, y, size, anchor: 'end', o: 1 });
+  M(g, ['='], { x: xEq, y, size, anchor: 'middle' });
+  const r = mrow(g, R, { x: xEq + size * .45, y, size, o: 1 });
+  show(g, t0);
+  g._r = r;
+  return g;
+}
+// The plane of f and its curve live outside the panels, so they stay put from beat to beat.
+function fBoard(t0) {
+  if (!S.fb) {
+    S.fb = G(scene, { o: 0 });
+    S.P = plane(S.fb, { ...PL, t0: 0 });
+  }
+  tw(S.fb, { o: 1 }, t0, .4);
+  return S.P;
+}
+const hideBoard = t0 => { if (S.fb) tw(S.fb, { o: 0 }, t0, .3); };
+function fCurve(t0, dur = 1.8) {
+  if (!S.fcurve) S.fcurve = S.P.fn(fq, -.3, 6.3, COL.chalk, t0, { into: S.fb, w: 5, dur });
+  return S.fcurve;
+}
+// SVG path of y = f(x) over [xa, xb], cut to the plane's y range.
+function curveD(P, f, xa, xb, n = 120) {
+  let d = '', pen = false;
+  for (let i = 0; i <= n; i++) {
+    const x = xa + (xb - xa) * i / n, y = f(x), inside = y >= P.y0 - .5 && y <= P.y1 + .5;
+    if (inside) { d += `${pen ? 'L' : 'M'}${P.PX(x).toFixed(1)} ${P.PY(y).toFixed(1)}`; pen = true; } else pen = false;
+  }
+  return d;
+}
+const ring = (p, P, x, y, color, t0) => {
+  const g = G(p, { x: P.PX(x), y: P.PY(y), s: 0, o: 0 });
+  mk('circle', { r: 17, fill: 'none', stroke: color, 'stroke-width': 4 }, g);
+  pop(g, t0);
+  return g;
+};
+const clamp01 = q => Math.max(0, Math.min(1, q));
+
+/* ---------- beats ---------- */
+const BEATS = [
+  ['intro', 'Função quadrática', (m, D) => {
+    const g = G(scene, { o: 0, y: 24 });
+    T(g, 'Unidade 1 · Capítulo 1', { x: 800, y: 300, size: 28, fill: COL.dim, anchor: 'middle' });
+    T(g, 'Função quadrática', { x: 800, y: 410, size: 92, weight: 600, anchor: 'middle' });
+    tw(g, { o: 1, y: 0 }, .2, 1.1, out);
+    const arc = path(scene, 'M560 470Q800 770 1040 470', { stroke: V_C, 'stroke-width': 5 }, { d: 0 });
+    draw(arc, m('sub'), 1.4);
+    const v = G(scene, { x: 800, y: 620, s: 0, o: 0 });
+    mk('circle', { r: 11, fill: V_C }, v);
+    pop(v, m('sub', 1.3));
+    const r = T(scene, 'concavidade · raízes · vértice · gráfico', { x: 800, y: 700, size: 32, fill: COL.dim, anchor: 'middle', o: 0 });
+    show(r, m('sub', 1.6));
+    tw(g, { o: 0, y: -24 }, D - .9, .8); hide(r, D - .9, .8); hide(arc, D - .9, .8); hide(v, D - .9, .8);
+  }],
+
+  ['forma', 'A forma geral', (m) => {
+    const p = panel(0);
+    kick(p, 'A forma geral', .15, 800, 'middle');
+    const gen = mrow(p, ['f(x) = ', { m: 'a', fill: A_C }, ['x', E(2)], ' + ', { m: 'b', fill: B_C }, 'x', ' + ', { m: 'c', fill: C_C }],
+      { x: 800, y: 230, size: 76, anchor: 'middle', t0: m('form') });
+    // a, b and c: the coefficients
+    const lab = note(p, 'coeficientes', 800, 300, m('abc', .2), { size: 28, anchor: 'middle' });
+    [1, 4, 7].forEach((i, k) => {
+      const u = path(p, `M${itemX(gen, i) - 18} 252H${itemX(gen, i) + 18}`, { stroke: [A_C, B_C, C_C][k], 'stroke-width': 4 }, { d: 0 });
+      draw(u, m('abc', k * .35), .3);
+    });
+    hide(lab, m('ex', -.3), .4);
+    // a can never be zero
+    mrow(p, [{ m: 'a ≠ 0', fill: A_C }, { gap: 22 }, { t: 'sem o x², sobraria uma reta', fill: COL.dim, size: 30 }],
+      { x: 800, y: 380, size: 46, anchor: 'middle', t0: m('ne0') });
+    // the example and its coefficients
+    const ex = mrow(p, ['f(x) = ', ['x', E(2)], ' ', { m: '− 6', fill: B_C }, 'x', ' ', { m: '+ 5', fill: C_C }],
+      { x: 800, y: 540, size: 66, anchor: 'middle', t0: m('ex') });
+    const chips = [['a = 1', A_C, 520, 1, 'ca'], ['b = −6', B_C, 800, 3, 'cb'], ['c = 5', C_C, 1080, 6, 'cc']];
+    const made = chips.map(([str, col, x, i, mark]) => {
+      const l = path(p, `M${itemX(ex, i)} 562L${x} 632`, { stroke: col, 'stroke-width': 3, 'stroke-dasharray': '6 7' }, { o: 0 });
+      show(l, m(mark), .3);
+      const c = mrow(p, [{ m: str, fill: col }], { x, y: 690, size: 50, anchor: 'middle', t0: m(mark, .1) });
+      return c;
+    });
+    // the sign belongs to b
+    const ov = mk('ellipse', { cx: itemX(ex, 3), cy: 520, rx: 62, ry: 50, fill: 'none', stroke: B_C, 'stroke-width': 4 }, p);
+    put(ov, { o: 0 });
+    show(ov, m('sign'), .3);
+    pulse(made[1], m('sign', .5), 1.15);
+  }],
+
+  ['grafico', 'Do cálculo ao gráfico', (m) => {
+    const p = panel(0);
+    kick(p, 'Do cálculo ao gráfico');
+    const P = fBoard(.1);
+    P.layer = p;
+    // a table of values
+    const tx = 200, ty = 330, row0 = 250, dy = 62;
+    const head = G(p, { o: 0 });
+    M(head, ['x'], { x: tx, y: 190, size: 38, fill: COL.dim });
+    M(head, ['f(x)'], { x: ty, y: 190, size: 38, fill: COL.dim });
+    path(head, 'M140 210H400M265 160V650', { stroke: COL.faint, 'stroke-width': 2 });
+    show(head, .2);
+    const vals = [];
+    const rowAt = (x, t0) => {
+      const y = row0 + x * dy;
+      const a = M(p, [String(x)], { x: tx, y, size: 36, o: 0 });
+      const b = M(p, [num(fq(x))], { x: ty, y, size: 36, o: 0 });
+      show(a, t0, .3); show(b, t0 + .35, .3);
+      P.dot(x, fq(x), COL.chalk, t0 + .4, { r: 8 });
+      vals[x] = b;
+    };
+    const comp0 = mrow(p, ['f(0) = 0', E(2), ' − 6·0 + 5 = 5'], { x: 430, y: row0, size: 32, t0: m('x0') });
+    rowAt(0, m('x0', 1));
+    const comp1 = mrow(p, ['f(1) = 1', E(2), ' − 6·1 + 5 = 0'], { x: 430, y: row0 + dy, size: 32, t0: m('x1') });
+    rowAt(1, m('x1', 1.6));
+    hide(comp0, m('rest'), .4); hide(comp1, m('rest'), .4);
+    for (let x = 2; x <= 6; x++) rowAt(x, m('rest', .2 + (x - 2) * .5));
+    fCurve(m('curve'));
+    // symmetry about x = 3
+    P.line(3, -5, 3, 6, V_C, m('sym'), { dash: '10 10', w: 3 });
+    [[2, 4], [1, 5], [0, 6]].forEach(([a, b], k) => {
+      const t = m('sym', 1.2 + k * .8), y = fq(a);
+      const s = path(p, `M${P.PX(a)} ${P.PY(y)}H${P.PX(b)}`, { stroke: V_C, 'stroke-width': 3, 'stroke-dasharray': '6 8' }, { o: 0 });
+      show(s, t, .3);
+      pulse(vals[a], t, 1.35); pulse(vals[b], t, 1.35);
+    });
+  }],
+
+  ['concav', 'Concavidade', (m, D) => {
+    const p = panel(0);
+    hideBoard(0);
+    kick(p, 'Concavidade: o sinal de a');
+    const P = plane(p, { cx: 1150, cy: 470, u: 52, x0: -4, x1: 4, y0: -5, y1: 5, t0: .1 });
+    // y = a(x² − 4): a = 1 gives x² − 4, a = −1 gives −x² + 4; the curve turns over as a passes through 0
+    const tf = m('flip', .3), dur = 2.6;
+    const aAt = t => t <= tf ? 1 : t >= tf + dur ? -1 : 1 - 2 * io(clamp01((t - tf) / dur));
+    const cur = path(p, curveD(P, x => x * x - 4, -4, 4), { stroke: COL.chalk, 'stroke-width': 5 }, { d: 0 });
+    draw(cur, .3, 1.2);
+    const vx = G(p, { x: P.PX(0), y: P.PY(-4), s: 0, o: 0 });
+    mk('circle', { r: 11, fill: V_C, stroke: COL.board, 'stroke-width': 2 }, vx);
+    pop(vx, m('up', 1.2));
+    let lastA = null;
+    clockRun(t => {
+      const a = aAt(t);
+      if (a === lastA) return;
+      lastA = a;
+      cur.setAttribute('d', curveD(P, x => a * (x * x - 4), -4, 4));
+      put(vx, { y: P.PY(-4 * a) });
+    }, D);
+    const eqUp = mrow(p, ['y = x', E(2), ' − 4'], { x: 1185, y: 182, size: 34, t0: .5 });
+    hide(eqUp, tf, .3);
+    mrow(p, ['y = −x', E(2), ' + 4'], { x: 1185, y: 182, size: 34, t0: tf + dur - .2 });
+    const minL = note(p, 'mínimo', P.PX(0) + 22, P.PY(-4) + 38, m('up', 1.5), { size: 26, fill: V_C, weight: 600 });
+    hide(minL, tf, .3);
+    note(p, 'máximo', P.PX(0) + 22, P.PY(4) - 22, m('down', .3), { size: 26, fill: V_C, weight: 600 });
+    // the two cases, on the left
+    const glyph = (y, up, t0) => {
+      const g = path(p, up ? 'M0 -26Q36 50 72 -26' : 'M0 26Q36 -50 72 26', { stroke: A_C, 'stroke-width': 5 }, { d: 0 });
+      g.setAttribute('transform', `translate(330 ${y - 16})`);
+      draw(g, t0, .6);
+      return g;
+    };
+    mrow(p, [{ m: 'a > 0', fill: A_C }], { x: LX, y: 290, size: 58, t0: m('up') });
+    glyph(290, true, m('up', .3));
+    note(p, 'concavidade voltada para cima', LX, 350, m('up', .8), { size: 32, fill: COL.chalk });
+    note(p, 'a parábola tem ponto mínimo', LX, 395, m('up', 3.2));
+    mrow(p, [{ m: 'a < 0', fill: A_C }], { x: LX, y: 540, size: 58, t0: m('flip') });
+    glyph(540, false, m('down'));
+    note(p, 'concavidade voltada para baixo', LX, 600, m('down', .3), { size: 32, fill: COL.chalk });
+    note(p, 'a parábola tem ponto máximo', LX, 645, m('down', 2.6));
+    note(p, 'boca para cima', 430, 285, m('tip', 1.4), { size: 26, fill: A_C, weight: 600 });
+    note(p, 'boca para baixo', 430, 535, m('tip', 3.4), { size: 26, fill: A_C, weight: 600 });
+  }],
+
+  ['delta', 'Raízes e o Δ', (m) => {
+    const p = panel(0);
+    kick(p, 'Raízes e o discriminante Δ');
+    const P = fBoard(0);
+    P.layer = p;
+    fCurve(0);
+    mrow(p, [{ t: 'raízes:', fill: R_C, weight: 600 }, { gap: 16 }, 'f(x) = 0'], { x: LX, y: 180, size: 44, t0: .2 });
+    ring(p, P, 1, 0, R_C, m('cross', .4)); ring(p, P, 5, 0, R_C, m('cross', .7));
+    eqRow(p, [{ m: 'Δ', fill: D_C }], [{ m: ['b', E(2)], fill: B_C }, ' − 4', { m: 'a', fill: A_C }, { m: 'c', fill: C_C }], 300, m('dform'));
+    eqRow(p, null, [{ m: ['(−6)', E(2)], fill: B_C }, ' − 4 · ', { m: '1', fill: A_C }, ' · ', { m: '5', fill: C_C }], 390, m('dsub'));
+    eqRow(p, null, [{ m: '36', fill: B_C }, ' − 20'], 480, m('dsq', 1.6));
+    mrow(p, [{ t: 'pois ', fill: COL.dim, size: 26 }, '(−6)·(−6) = +36'], { x: 450, y: 480, size: 30, fill: COL.dim, t0: m('dsq', 1.6) });
+    const res = eqRow(p, [{ m: 'Δ', fill: D_C }], [{ m: '16', fill: D_C }], 580, m('dres', 1.8), { size: 54 });
+    const box = mk('rect', { x: 118, y: 528, width: 250, height: 74, rx: 14, fill: 'none', stroke: D_C, 'stroke-width': 3 }, p);
+    put(box, { o: 0 });
+    show(box, m('dres', 2.2), .4);
+    pulse(res, m('dres', 2.2), 1.08);
+  }],
+
+  ['bhaskara', 'Fórmula de Bhaskara', (m) => {
+    const p = panel(0);
+    kick(p, 'Fórmula de Bhaskara');
+    const P = fBoard(0);
+    P.layer = p;
+    fCurve(0);
+    mrow(p, [{ m: 'Δ = 16', fill: D_C }], { x: LX, y: 170, size: 34, t0: .2 });
+    mrow(p, ['x = ', F('−b ± √Δ', '2a')], { x: LX, y: 300, size: 58, t0: m('form') });
+    mrow(p, [{ m: '−b = −(−6) = 6', fill: B_C }], { x: 520, y: 252, size: 30, t0: m('sub') });
+    mrow(p, [{ m: '√16 = 4', fill: D_C }], { x: 520, y: 302, size: 30, t0: m('rt') });
+    mrow(p, [{ m: '2a = 2', fill: A_C }], { x: 520, y: 352, size: 30, t0: m('da') });
+    mrow(p, ['x = ', F('6 ± 4', '2')], { x: LX, y: 450, size: 58, t0: m('da', .9) });
+    mrow(p, [{ sub: ['x', '1'] }, ' = ', F('6 + 4', '2'), ' = ', F('10', '2'), ' = ', { m: '5', fill: R_C }], { x: LX, y: 590, size: 46, t0: m('x1') });
+    P.dot(5, 0, R_C, m('x1', 3), { r: 11 });
+    mrow(p, [{ sub: ['x', '2'] }, ' = ', F('6 − 4', '2'), ' = ', F('2', '2'), ' = ', { m: '1', fill: R_C }], { x: LX, y: 700, size: 46, t0: m('x2') });
+    P.dot(1, 0, R_C, m('x2', 3), { r: 11 });
+    ring(p, P, 1, 0, R_C, m('land', 1)); ring(p, P, 5, 0, R_C, m('land', 1.3));
+  }],
+
+  ['papel', 'O papel do Δ', (m, D) => {
+    const p = panel(0);
+    kick(p, 'O papel do Δ');
+    const P = fBoard(0);
+    P.layer = p;
+    fCurve(0);
+    tw(S.fcurve, { o: 0 }, 0, .05);   // the live curve below takes its place
+    const tz = m('zero', .4), tn = m('neg', .4), dur = 1.6;
+    const cAt = t => 5 + 4 * io(clamp01((t - tz) / dur)) + 4 * io(clamp01((t - tn) / dur));
+    const cur = path(p, curveD(P, fq, -.3, 6.3), { stroke: COL.chalk, 'stroke-width': 5 });
+    const roots = [0, 1].map(() => { const g = G(p, { x: P.PX(1), y: P.PY(0) }); mk('circle', { r: 11, fill: R_C, stroke: COL.board, 'stroke-width': 2 }, g); return g; });
+    mrow(p, ['f(x) = x', E(2), ' − 6x + ', { m: 'c', fill: C_C }], { x: LX, y: 180, size: 42, t0: .2 });
+    const cT = T(p, 'c = 5', { x: LX, y: 240, size: 34, fill: C_C, font: MATH, o: 0 });
+    const dT = T(p, 'Δ = 16', { x: LX + 170, y: 240, size: 34, fill: D_C, font: MATH, o: 0 });
+    show(cT, .4); show(dT, .4);
+    let last = null;
+    clockRun(t => {
+      const c = cAt(t);
+      if (c === last) return;
+      last = c;
+      cur.setAttribute('d', curveD(P, x => x * x - 6 * x + c, -.3, 6.3));
+      const d = 36 - 4 * c, ci = Math.round(c);
+      cT.textContent = 'c = ' + ci; dT.textContent = 'Δ = ' + num(36 - 4 * ci);
+      const h = d >= 0 ? Math.sqrt(d) / 2 : 0;
+      put(roots[0], { x: P.PX(3 - h), o: d >= -1e-9 ? 1 : 0 });
+      put(roots[1], { x: P.PX(3 + h), o: d >= -1e-9 ? 1 : 0 });
+    }, D);
+    const rows = [
+      [[{ m: 'Δ > 0', fill: D_C }], 'duas raízes reais', 350, 'pos'],
+      [[{ m: 'Δ = 0', fill: D_C }], 'uma raiz: a parábola encosta no eixo', 470, 'zero'],
+      [[{ m: 'Δ < 0', fill: D_C }], 'nenhuma raiz real', 590, 'neg'],
+    ].map(([mm, str, y, mark]) => {
+      const g = G(p, { o: 0 });
+      mrow(g, mm, { x: LX, y, size: 48, o: 1 });
+      T(g, str, { x: LX + 175, y: y - 4, size: 30 });
+      show(g, m(mark));
+      return g;
+    });
+    tw(rows[0], { o: .4 }, m('zero'), .4);
+    tw(rows[1], { o: .4 }, m('neg'), .4);
+    mrow(p, [{ m: [R('−16')], fill: COL.bad }, { t: '  não é um número real', fill: COL.dim, size: 28 }], { x: LX + 175, y: 660, size: 36, t0: m('none', 2.2) });
+  }],
+
+  ['vertice', 'Vértice', (m) => {
+    const p = panel(0);
+    kick(p, 'O vértice: ponto de virada');
+    const P = fBoard(0);
+    P.layer = p;
+    fCurve(0);
+    tw(S.fcurve, { o: 1 }, 0, .4);
+    P.dot(1, 0, R_C, .2, { r: 9 }); P.dot(5, 0, R_C, .2, { r: 9 });
+    const r1 = mrow(p, [{ sub: ['x', 'v'], fill: V_C }, ' = ', F('−b', '2a')], { x: LX, y: 240, size: 50, t0: m('xv') });
+    mrow(p, [' = ', F('6', '2'), ' = ', { m: '3', fill: V_C }], { x: LX + r1._w, y: 240, size: 50, t0: m('xvc') });
+    P.line(3, -5, 3, 6, V_C, m('xvc', 1.2), { dash: '10 10', w: 3 });
+    P.arrow(1, .8, 2.95, .8, COL.dim, m('mid', .3), { label: '2' });
+    P.arrow(5, .8, 3.05, .8, COL.dim, m('mid', .9), { label: '2' });
+    const r2 = mrow(p, [{ sub: ['y', 'v'], fill: V_C }, ' = ', F('−Δ', '4a')], { x: LX, y: 420, size: 50, t0: m('yv') });
+    mrow(p, [' = ', F('−16', '4'), ' = ', { m: '−4', fill: V_C }], { x: LX + r2._w, y: 420, size: 50, t0: m('yvc') });
+    const v = P.dot(3, -4, V_C, m('yvc', 2.4), { r: 13 });
+    mrow(p, [{ m: 'V(3, −4)', fill: V_C }], { x: P.PX(3) + 22, y: P.PY(-4) + 46, size: 28, t0: m('yvc', 2.6) });
+    mrow(p, [{ m: 'a > 0', fill: A_C }, { t: '   →   V é o ponto mínimo', fill: COL.chalk, size: 32 }], { x: LX, y: 580, size: 40, t0: m('min') });
+    mrow(p, [{ t: 'menor valor de f:  ', fill: COL.dim, size: 30 }, { m: '−4', fill: V_C }], { x: LX, y: 650, size: 40, t0: m('min', 5) });
+    pulse(v, m('min', .6), 1.6);
+  }],
+
+  ['q1', 'Verificação rápida', () => {
+    const p = panel(0);
+    hideBoard(0);
+    kick(p, 'Verificação rápida', .15, 800, 'middle');
+    mrow(p, ['g(x) = x', E(2), ' − 4x + 1'], { x: 800, y: 300, size: 80, anchor: 'middle', t0: .3 });
+    note(p, 'Encontre o vértice V(xᵥ, yᵥ).', 800, 400, .8, { size: 32, anchor: 'middle' });
+  }, { ask: done => quiz(BAND, [{
+    id: 'c-vertice',
+    prompt: ['Encontre o vértice de ', $m('g(x) = x', E(2), ' − 4x + 1'), '.'],
+    build: blanks([
+      { parts: ['xᵥ = ', { box: '2' }], why: 'xᵥ = −b/2a = −(−4)/2 = 4/2 = 2.', hint: 'Use xᵥ = −b/2a, com b = −4: cuidado com o sinal.' },
+      { parts: ['yᵥ = ', { box: '-3' }], why: 'Δ = 16 − 4 = 12 e yᵥ = −Δ/4a = −12/4 = −3. Confira: g(2) = 4 − 8 + 1 = −3.', hint: 'Calcule Δ = b² − 4ac = 16 − 4 = 12, depois −Δ/4a. Ou calcule g(2).' },
+    ]),
+  }], done) }],
+
+  ['leitura', 'Lendo o gráfico', (m) => {
+    const p = panel(0);
+    kick(p, 'Lendo o gráfico');
+    const P = fBoard(0);
+    P.layer = p;
+    fCurve(0);
+    tw(S.fcurve, { o: 1 }, 0, .4);
+    mrow(p, [{ t: 'eixo y:', fill: COL.dim, size: 30 }, { gap: 16 }, { m: '(0, 5)', fill: C_C }], { x: LX, y: 220, size: 46, t0: m('cy') });
+    P.dot(0, 5, C_C, m('cy', .3), { r: 12 });
+    note(p, 'o valor é o próprio c', LX, 270, m('cy', 4.8), { size: 26, fill: C_C });
+    mrow(p, [{ t: 'eixo x:', fill: COL.dim, size: 30 }, { gap: 16 }, { m: '(1, 0)', fill: R_C }, { t: '  e  ', fill: COL.dim, size: 30 }, { m: '(5, 0)', fill: R_C }], { x: LX, y: 370, size: 46, t0: m('cx') });
+    P.dot(1, 0, R_C, m('cx', .4), { r: 12 }); P.dot(5, 0, R_C, m('cx', .7), { r: 12 });
+    P.line(3, -5, 3, 6, V_C, m('dec'), { dash: '10 10', w: 2 });
+    P.dot(3, -4, V_C, m('dec'), { r: 11 });
+    P.fn(fq, -.15, 3, COL.bad, m('dec', .5), { w: 9, dur: 2.4 });
+    mrow(p, [{ t: 'decrescente', fill: COL.bad, weight: 700, size: 34 }, { gap: 18 }, 'x < 3'], { x: LX, y: 520, size: 46, t0: m('dec', 3) });
+    P.fn(fq, 3, 6.15, COL.good, m('inc', .5), { w: 9, dur: 2.4 });
+    mrow(p, [{ t: 'crescente', fill: COL.good, weight: 700, size: 34 }, { gap: 18 }, 'x > 3'], { x: LX, y: 620, size: 46, t0: m('inc', 2.6) });
+  }],
+
+  ['lancamento', 'Problema: altura máxima', (m, D) => {
+    const p = panel(0);
+    hideBoard(0);
+    kick(p, 'Problema: a altura máxima');
+    const H = t => -5 * t * t + 20 * t;
+    const A = axes(p, { x0: 1040, y0: 730, w: 500, h: 500, xs: [0, 4, 1], ys: [0, 20, 5], xl: 'tempo t (s)', yl: 'altura h (m)', t0: .3 });
+    // the ball and its ruler share the graph's height scale
+    const BX = 255;
+    path(p, 'M110 730H400', { stroke: COL.chalk, 'stroke-width': 4 });
+    let rd = '';
+    for (let h = 0; h <= 20; h += 5) rd += `M150 ${A.PY(h)}H168`;
+    const ruler = G(p, { o: 0 });
+    path(ruler, `M160 ${A.PY(0)}V${A.PY(20)}` + rd, { stroke: COL.dim, 'stroke-width': 2 });
+    for (let h = 5; h <= 20; h += 5) T(ruler, String(h), { x: 140, y: A.PY(h) + 7, size: 20, fill: COL.dim, font: MATH, anchor: 'end' });
+    show(ruler, .4);
+    const ball = G(p, { x: BX, y: A.PY(0) - 20, o: 0 });
+    mk('circle', { r: 20, fill: COL.chalk }, ball);
+    path(ball, 'M-14 -8Q0 4 14 -8M-12 10Q0 0 12 10', { stroke: COL.board, 'stroke-width': 2.5 });
+    show(ball, .4);
+    const link = path(p, '', { stroke: COL.dim, 'stroke-width': 2, 'stroke-dasharray': '5 7' });
+    const trace = path(p, '', { stroke: COL.chalk, 'stroke-width': 5 });
+    const tracer = G(p, { o: 0 });
+    mk('circle', { r: 9, fill: COL.chalk }, tracer);
+    // tau: the ball's own time. One whole flight first, then up to the top again and back down for the answer.
+    const f1 = m('fly'), up = m('hv', 2), down = m('ground', .2);
+    const tauAt = t => t < up ? 4 * clamp01((t - f1) / 4) : t < down ? 2 * out(clamp01((t - up) / 1.6)) : 2 + 2 * clamp01((t - down) / 1.4) ** 2;
+    const seen = t => (t >= f1 && t < f1 + 4.6) || t >= up;
+    let lastKey = '', lastTT = -1;
+    clockRun(t => {
+      const tau = tauAt(t), vis = seen(t) ? 1 : 0, key = tau.toFixed(4) + vis;
+      if (key === lastKey) return;
+      lastKey = key;
+      const hy = A.PY(H(tau));
+      put(ball, { y: hy - 20 });
+      put(tracer, { x: A.PX(tau), y: hy, o: vis });
+      link.setAttribute('d', vis && H(tau) > .4 ? `M${BX + 26} ${hy}H${A.PX(tau) - 12}` : '');
+      const tt = 4 * clamp01((Math.min(t, up) - f1) / 4);   // the first flight draws the curve; it stays
+      if (tt !== lastTT) {
+        lastTT = tt;
+        let d = '';
+        for (let i = 0; i <= 80; i++) { const s = tt * i / 80; d += `${i ? 'L' : 'M'}${A.PX(s).toFixed(1)} ${A.PY(H(s)).toFixed(1)}`; }
+        trace.setAttribute('d', tt > 0 ? d : '');
+      }
+    }, D);
+    mrow(p, ['h(t) = ', { m: '−5', fill: A_C }, ['t', E(2)], ' + ', { m: '20', fill: B_C }, 't'], { x: LX, y: 160, size: 46, t0: m('hf') });
+    mrow(p, [{ m: 'a = −5 < 0', fill: A_C }, { t: '   abre para baixo: vértice = máximo', fill: COL.dim, size: 26 }], { x: 430, y: 295, size: 34, t0: m('neg') });
+    mrow(p, [{ sub: ['t', 'v'], fill: V_C }, ' = ', F('−b', '2a'), ' = ', F('−20', '−10'), ' = ', { m: '2', fill: V_C }, { t: ' s', fill: V_C, size: 34 }], { x: 430, y: 385, size: 42, t0: m('tv') });
+    const vl = path(p, `M${A.PX(2)} ${A.PY(0)}V${A.PY(20)}`, { stroke: V_C, 'stroke-width': 3, 'stroke-dasharray': '8 8' }, { o: 0 });
+    show(vl, m('tv', 4), .4);
+    mrow(p, [{ m: 'Δ', fill: D_C }, ' = 20', E(2), ' − 4·(−5)·0 = ', { m: '400', fill: D_C }], { x: 430, y: 480, size: 42, t0: m('dl') });
+    mrow(p, [{ sub: ['h', 'v'], fill: V_C }, ' = ', F('−Δ', '4a'), ' = ', F('−400', '−20'), ' = ', { m: '20', fill: V_C }, { t: ' m', fill: V_C, size: 34 }], { x: 430, y: 575, size: 42, t0: m('hv') });
+    const top = G(p, { x: A.PX(2), y: A.PY(20), s: 0, o: 0 });
+    mk('circle', { r: 13, fill: V_C, stroke: COL.board, 'stroke-width': 2 }, top);
+    pop(top, up + 1.6);
+    mrow(p, [{ m: 'V(2, 20)', fill: V_C }], { x: A.PX(2) + 24, y: A.PY(20) - 18, size: 28, t0: up + 1.8 });
+    mrow(p, [{ t: 'volta ao chão em ', fill: COL.chalk, size: 30 }, { m: 't = 4', fill: R_C }, { t: ' s', fill: R_C, size: 30 }], { x: 430, y: 665, size: 40, t0: m('ground') });
+    [0, 4].forEach((x, k) => {
+      const g = G(p, { x: A.PX(x), y: A.PY(0), s: 0, o: 0 });
+      mk('circle', { r: 11, fill: R_C, stroke: COL.board, 'stroke-width': 2 }, g);
+      pop(g, down + 1.4 + k * .2);
+    });
+  }],
+
+  ['wrap', 'Resumo', (m) => {
+    const p = panel(0);
+    kick(p, 'Para guardar');
+    [['O sinal de a dá a concavidade: a > 0 abre para cima, a < 0 para baixo.', 'w1', A_C],
+     ['Δ = b² − 4ac conta as raízes; Bhaskara calcula: x = (−b ± √Δ) / 2a.', 'w2', D_C],
+     ['Vértice: xᵥ = −b/2a e yᵥ = −Δ/4a. É o ponto mínimo ou máximo.', 'w3', V_C],
+     ['O gráfico corta o eixo y no ponto (0, c).', 'w4', C_C]].forEach(([str, mark, col], i) => {
+      const g = G(p, { x: -16, y: 220 + i * 120, o: 0 });
+      mk('circle', { cx: 150, cy: -11, r: 26, fill: col }, g);
+      T(g, String(i + 1), { x: 150, y: 0, size: 30, fill: COL.board, weight: 700, anchor: 'middle' });
+      T(g, str, { x: 205, size: 34, weight: 600 });
+      tw(g, { o: 1, x: 0 }, m(mark), .6);
+    });
+    note(p, 'Agora: 2 itens no estilo PAS — Certo ou Errado.', 800, 730, m('end'), { size: 32, fill: COL.task, anchor: 'middle', weight: 600 });
+  }],
+
+  ['final1', 'Itens no estilo PAS', () => { const p = panel(0); hideBoard(0); }, { ask: done => quiz(SCREEN, [
+    {
+      id: 'p-pas-1',
+      prompt: ['Considere a função ', $m('f(x) = −x', E(2), ' + 2x + 8'), '. Julgue o item a seguir.'],
+      build: grid([{
+        parts: ['O valor máximo de ', $m('f'), ' é 9, atingido em ', $m('x = 1'), '.'], ans: ['C'],
+        why: ['Item certo. Como ', $m('a = −1 < 0'), ', o vértice é ponto de máximo: ', $m('x = −2/(2·(−1)) = 1'), ' e ', $m('f(1) = −1 + 2 + 8 = 9'), '.'],
+      }], [['C', 'Certo', COL.good], ['E', 'Errado', COL.bad]], { multi: false, text: true }),
+    },
+    {
+      id: 'p-pas-2',
+      prompt: ['Considere a função ', $m('f(x) = −x', E(2), ' + 2x + 8'), '. Julgue o item a seguir.'],
+      build: grid([{
+        parts: [$m('f'), ' é crescente para todo ', $m('x'), ' maior que 1.'], ans: ['E'],
+        why: ['Item errado. Com ', $m('a < 0'), ', a parábola sobe até o vértice, em ', $m('x = 1'), ', e desce depois dele. Então ', $m('f'), ' é decrescente para ', $m('x > 1'), '.'],
+      }], [['C', 'Certo', COL.good], ['E', 'Errado', COL.bad]], { multi: false, text: true }),
+    },
+  ], done, 'Estilo PAS · Certo ou Errado') }],
+
+  ['finish', 'Fim', () => { panel(0); }, { ask: finishCard }],
+].map(([id, title, run, extra]) => ({ id, title, run, ...extra }));
+
+boot();
+</script>
+</body>
+</html>
